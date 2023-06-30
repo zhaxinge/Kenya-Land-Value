@@ -1,0 +1,44 @@
+name: mosaiks-env
+channels:
+  - pytorch
+  - conda-forge
+  - r
+  - bolliger32
+dependencies:
+# only needed for interactivity
+  - black=20.8b1=py_1
+  - isort=5.8.0=pyhd8ed1ab_0
+  - jupyterlab=3.0.14=pyhd8ed1ab_0
+  - jupyterlab_code_formatter=1.4.10=pyhd8ed1ab_1
+  - jupyter-resource-usage=0.5.1=pyhd8ed1ab_0
+  - nodejs=15.14.0=h92b4a50_0
+# needed for core functionality of package
+  - blas #=2.108=mkl
+  - cartopy #=0.18.0=py39h3b23250_13
+  - cudatoolkit #=10.2.89=h8f6ccaa_8
+  - cupy #=8.6.0=py39hb309dcf_0
+  - dill #=0.3.3=pyhd8ed1ab_0
+  - dask #=2021.2.0=pyhd8ed1ab_0
+  - distributed #=2021.2.0=py39hf3d152e_0
+  - geopandas #=0.9.0=pyhd8ed1ab_0
+  - imageio #=2.9.0=py_0
+  - loguru #=0.5.3=py39hf3d152e_2
+  - matplotlib #=3.4.1=py39hf3d152e_0
+  - numba #=0.53.1=py39h4292f66_0
+  - numpy #=1.20.2=py39hdbf815f_0
+  - pandas #=1.2.4=py39hde0f152_0
+  - papermill #=2.3.3=pyhd8ed1ab_0
+  - phantomjs #=2.1.1=1
+  - pip #=21.0.1=pyhd8ed1ab_0
+  - python #=3.9.2=hffdb5ce_0_cpython
+  - pytorch #=1.8.1=py3.9_cuda10.2_cudnn7.6.5_0
+  - redis-py #=3.5.3=pyh9f0ad1d_0
+  - scikit-image #=0.18.1=py39hde0f152_0
+  - scikit-learn #=0.24.1=py39h4dfa638_0
+  - seaborn #=0.11.1=ha770c72_0
+  - shapely #=1.7.1=py39ha61afbd_4
+  - tensorboardx #=2.2=pyhd8ed1ab_0
+  - torchvision #=0.2.2=py_3
+  - tqdm #=4.60.0=pyhd8ed1ab_0
+  - xarray #=0.17.0=pyhd8ed1ab_0
+  - sentinelhub
