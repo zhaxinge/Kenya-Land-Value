@@ -32,7 +32,7 @@ The data folder is organized as follows:
 ### 2.1. analysis/
 
 
-- [MOSAIKS_kenya_619.ipynb](code/analysis/MOSAIKS_kenya_619.ipynb): It relies on intermediate data in `data/int/`, and it calls on settings in [config.py](code/mosaiks/config.py) 
+- [MOSAIKS_kenya_619.ipynb](code/MOSAIKS_kanyan_619.ipynb): It relies on intermediate data in `data/int/`, and it calls on settings in [config.py](code/mosaiks/config.py) 
 
 - [1_create_grid/](code/analysis/1_create_grid): This folder contains scripts to construct the standardized grids that are used to connect satellite image-based features to labeled data.
 
