@@ -32,7 +32,7 @@ The data folder is organized as follows:
 ### 3.1. analysis/
 
 
-- [MOSAIKS_example.ipynb](code/analysis/MOSAIKS_example.ipynb): While this notebook is not designed to directly replicate any exact figure or table in the paper, it is an example implementation of the MOSAIKS pipeline that can be adapted to any new prediction problem a user may face. This notebook shows how a user can load and merge labeled data with satellite image-based MOSAIKS features, train a model using ridge regression, and generate and map predictions from the trained model. It conducts these three steps for the case of predicting population density in the United States. This notebook can easily be run on a personal computer. It relies on intermediate data in `data/int/`, and it calls on settings in [config.py](code/mosaiks/config.py) (any of which can be adapted as desired for the other tasks in this paper or for a new prediction problem faced by a future user).
+- [MOSAIKS_kenya_619.ipynb](code/analysis/MOSAIKS_kenya_619.ipynb): It relies on intermediate data in `data/int/`, and it calls on settings in [config.py](code/mosaiks/config.py) 
 
 - [0_grid_creation/](code/analysis/0_grid_creation): This directory contains scripts to construct the standardized grids that are used to connect satellite image-based features to labeled data, and to create our uniform-at-random and population-weighted samples from these grids. A detailed description of this grid can be found in Supplementary Materials Section S.2.1.
 
@@ -45,13 +45,7 @@ The data folder is organized as follows:
 
 ### mosaiks/
 
-This package contains all functions called by the analysis scripts in analysis/ and subfolders therein.
+This package contains all functions called by the analysis scripts in analysis/ and subfolders therein soureced from mosaik-paper.
 
-- [diagnostics/](code/mosaiks/diagnostics): Functions required to conduct the experiments shown in Figure 3, as well as some supplementary figures.
-- [plotting/](code/mosaiks/plotting): Functions required for generating figures shown in the main text and Supplementary Materials.
-- [solve/](code/mosaiks/solve): Functions required for training prediction models using ridge regression and k-fold cross-validation.
-- [utils/](code/mosaiks/utils): Basic utility tools and functions used throughout various steps in the analysis.
-- [featurization.py](code/mosaiks/featurization.py): Functions required for featurizing satellite imagery.
-- [transforms.py](code/mosaiks/transforms.py): Helper functions that apply some simple QA/QC on our label data prior to regression.
-- [config.py](code/mosaiks/config.py) and [config.R](code/mosaiks/config.R): Configuration files. This module contains settings that apply to the entire repository (e.g. file paths), settings that apply to each stage of analysis (e.g. parameters determining the spatial scale of the experiments shown in Figure 3B and C), and settings that apply to each task (e.g. whether to log the outcome variable or not). One exists for Python scripts and one for R scripts.
+
 
