@@ -27,9 +27,9 @@ The data folder is organized as follows:
 - `output/`: Contains outputs of regressions.
 
 
-## 3. Details on the contents of each subfolder within code
+## 2. Details on the contents of each subfolder within code
 
-### 3.1. analysis/
+### 2.1. analysis/
 
 
 - [MOSAIKS_kenya_619.ipynb](code/analysis/MOSAIKS_kenya_619.ipynb): It relies on intermediate data in `data/int/`, and it calls on settings in [config.py](code/mosaiks/config.py) 
@@ -44,7 +44,7 @@ The data folder is organized as follows:
 (code/mosaiks/config.py) and [config.R](code/mosaiks/config.R). Users can choose to enter the pipeline at this stage, relying on the output from the cleaning and standardization of both labeled data (“Y”) and features (“X”) occurring in scripts in steps 0 through 2, as all output is provided for all intermediate steps in `data/int/`.
 
 
-### mosaiks/
+### 2.2 mosaiks/
 
 This package contains all functions called by the analysis scripts in analysis/ and subfolders therein sourced from mosaiks paper.
 
