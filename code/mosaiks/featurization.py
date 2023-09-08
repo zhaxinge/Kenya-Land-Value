@@ -167,6 +167,40 @@ def chunk_idxs_by_size(size, chunk_size):
     return list(zip(idxs[:-1], idxs[1:]))
 
 
+class RCF(nn.Module):
+    """A model for extracting Random Convolution Features (RCF) from input imagery."""
+
+    def __init__(self, num_features=16, kernel_size=3, num_input_channels=3):
+        super(RCF, self).__init__()
+
+        # We create `num_features / 2` filters so require `num_features` to be divisible by 2
+        assert num_features % 2 == 0
+
+        self.conv1 = nn.Conv2d(
+            num_input_channels,
+            num_features // 2,
+            kernel_size=kernel_size,
+            stride=1,
+            padding=0,
+            dilation=1,
+            bias=True,
+        )
+
+        nn.init.normal_(self.conv1.weight, mean=0.0, std=1.0)
+        nn.init.constant_(self.conv1.bias, -1.0)
+
+    def forward(self, x):
+        x1a = F.relu(self.conv1(x), inplace=True)
+        x1b = F.relu(-self.conv1(x), inplace=True)
+
+        x1a = F.adaptive_avg_pool2d(x1a, (1, 1)).squeeze()
+        x1b = F.adaptive_avg_pool2d(x1b, (1, 1)).squeeze()
+
+        if len(x1a.shape) == 1:  # case where we passed a single input
+            return torch.cat((x1a, x1b), dim=0)
+        elif len(x1a.shape) == 2:  # case where we passed a batch of > 1 inputs
+            return torch.cat((x1a, x1b), dim=1)
+        
 class BasicCoatesNgNet(nn.Module):
     """ All image inputs in torch must be C, H, W """
 
@@ -281,8 +315,8 @@ def coatesng_featurize(
     net,
     dataset,
     data_batchsize=128,
-    num_filters=None,
-    filter_batch_size=None,
+    num_filters= 16,
+    filter_batch_size=1024,
     gpu=False,
     rgb=True,
 ):
@@ -293,6 +327,10 @@ def coatesng_featurize(
         num_filters = len(net.filters)
     X_lift_full = []
 
+
+
+
+    
     for start, end in chunk_idxs_by_size(num_filters, filter_batch_size):
         data_loader = torch.utils.data.DataLoader(dataset, batch_size=data_batchsize)
         X_lift_batch = []
@@ -305,13 +343,29 @@ def coatesng_featurize(
                     X_batch = X_batch.cuda()
                 X_var = X_batch
                 names += [x for x in X_batch_named[0]]
-                X_lift = net.forward_partial(X_var, start, end).cpu().data.numpy()
+                X_lift = net.forward(X_var).cpu().data.numpy()
                 X_lift_batch.append(X_lift)
+                print("X_lift_batch shapes:", [x.shape for x in X_lift_batch])
+                print("Fixing X_lift_batch shapes:")
+                for i, x in enumerate(X_lift_batch):
+                    if len(x.shape) == 1:
+                        print(f"Changing shape of array {i} from {x.shape} to (1, {x.shape[0]})")
+                        x_reshaped = x.reshape((1, -1))  # Reshape to 2 dimensions
+                        X_lift_batch[i] = x_reshaped
                 pbar.update(X_lift.shape[0])
-                #print("X_lift_batch",X_lift_batch.shape)
-        X_lift_full.append(np.concatenate(X_lift_batch, axis=0))
+        print("X_lift_batch lengths:", [x.shape for x in X_lift_batch])
+        try:     
+            X_lift_full.append(np.concatenate(X_lift_batch, axis=0))
+            print("X_lift_full length:", len(X_lift_full))
+        except ValueError as e:
+            print("Featurization Error:", e)
+            print("Skipping current file due to featurization error.")
+            continue 
+    
+    #print("Shapes of X_lift_full before concatenation:", [x.shape for x in X_lift_full])
     conv_features = np.concatenate(X_lift_full, axis=1)
-    net.deactivate()
+    #print("Shape of conv_features after concatenation:", conv_features.shape)
+# net.deactivate()
     return conv_features.reshape(len(dataset), -1), names
 
 
@@ -326,7 +380,7 @@ def build_featurizer(
     seed,
     filter_scale,
     X_train=None,
-    filter_batch_size=2048,
+    #filter_batch_size=2048,
 ):
     dtype = "float32"
     if patch_distribution == "empirical":
@@ -362,13 +416,8 @@ def build_featurizer(
         print("filters shape", filters.shape)
     else:
         raise Exception(f"Unsupported patch distribution : {patch_distribution}")
-    net = BasicCoatesNgNet(
-        filters,
-        pool_size=pool_size,
-        pool_stride=pool_stride,
-        bias=bias,
-        patch_size=patch_size,
-        filter_batch_size=filter_batch_size,
+    net = RCF(
+        num_features=256
     )
     return net
 
@@ -433,7 +482,7 @@ def __featurize(
     filter_scale,
     seed,
     data_batchsize=8,
-    filter_batch_size=1024,
+    #filter_batch_size=1024,
     img_size=256,
     patch_dataset_loc=None,
 ):
@@ -446,7 +495,7 @@ def __featurize(
     dataset = OnDiskDataset(image_folder, transform=transform)
     print("dataset size", len(dataset))
     gpu = torch.cuda.is_available()
-    num_channels = 3
+    num_channels = 1
     if patch_distribution == "empirical":
         idxs = np.random.choice(len(dataset), 10, replace=False)
         X_train_sample = []
@@ -467,7 +516,7 @@ def __featurize(
         seed,
         filter_scale,
         X_train_sample,
-        filter_batch_size,
+        #filter_batch_size,
     )
     start = time.time()
     print(featurizer)

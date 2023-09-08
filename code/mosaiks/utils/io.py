@@ -120,6 +120,7 @@ def get_X_latlon(c, city, mpg):
         c.features_dir,
         f"{city}_{mpg}_{fsettings['num_filters']}_{fsettings['pool_size']}.pkl",
     )
+    print(local_path)
     with open(local_path, "rb") as f:
         arrs = dill.load(f)
     X = pd.DataFrame(
@@ -133,7 +134,7 @@ def get_X_latlon(c, city, mpg):
 
     # sort both
     latlons = latlons.sort_values(["lat", "lon"], ascending=[False, True])
-    #X = X.loc[~X.index.duplicated(keep='first')]  # Remove duplicate index labels
+    X = X.loc[~X.index.duplicated(keep='first')]  # Remove duplicate index labels
     X = X.reindex(latlons.index)
 
     return X, latlons

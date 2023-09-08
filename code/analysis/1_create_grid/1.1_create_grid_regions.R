@@ -6,7 +6,7 @@
 
 ############################################################
 rm(list = ls())
-
+library(reticulate)
 library(rgdal)
 library(ggplot2)
 library(sp)
@@ -27,7 +27,7 @@ if (mosaiks_code == "") {
 
 for (city in c(#'Eldoret','Embu','Garissa','Kakamega','Kericho',
                'Kisumu'
-               #','Kitui','Machakos','Malindi','Mombasa','Nairobi','Naivasha','Nakuru','Nyeri',
+               #,'Kitui','Machakos','Malindi','Mombasa','Nairobi','Naivasha','Nakuru','Nyeri',
                #'Thika'
                )) {
   source(file.path(mosaiks_code, "mosaiks", "config.R"))
@@ -140,8 +140,7 @@ for (city in c(#'Eldoret','Embu','Garissa','Kakamega','Kericho',
   filename <- paste0("grid", "_",city, "_", as.character(zoom), "_", as.character(pixels), "_", 
                      sampling, "_",meters_per_grid,"_", format(S, scientific = FALSE))
   np <- import("numpy")
-  np$savez(file.path(grid_dir, paste0(filename, ".npz")), lon = allsamples$lon, lat = allsamples$lat, 
-           ID = allsamples$ID, zoom = zoom, pixels = pixels)
+  np$savez(file.path(grid_dir, paste0(filename, ".npz")), lon = allsamples$lon, lat = allsamples$lat, ID = allsamples$ID, zoom = zoom, pixels = pixels)
   
   print("-------- Saved .npz! -----------")
 }

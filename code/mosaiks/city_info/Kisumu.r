@@ -1,6 +1,6 @@
 
-latmin <- -0.458477
-latmax <- -0.200559
+latmin <- -0.200559
+latmax <- 0.040375
 lonmin <- 34.564208
 lonmax <- 34.878784
 

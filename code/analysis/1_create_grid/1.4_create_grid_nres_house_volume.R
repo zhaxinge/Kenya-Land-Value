@@ -22,11 +22,9 @@ if (mosaiks_code=="") {
 }
 
 
-for (city in c(#'Eldoret','Embu','Garissa','Kakamega','Kericho',
-               'Kisumu'
-               #','Kitui','Machakos','Malindi','Mombasa','Nairobi','Naivasha','Nakuru','Nyeri',
-               #'Thika'
-)) {
+for (city in c('Eldoret','Embu','Garissa','Kakamega','Kericho',
+               'Kisumu','Kitui','Machakos','Malindi','Mombasa','Nairobi','Naivasha','Nakuru','Nyeri',
+               'Thika')) {
   source(file.path(mosaiks_code, "mosaiks", "config.R"))
   res_dir = file.path(res_dir, city)
   out_dir = file.path(out_dir, city)
@@ -69,11 +67,12 @@ for (city in c(#'Eldoret','Embu','Garissa','Kakamega','Kericho',
   pixels = npz1$f[["pixels"]]
   ID = c(npz1$f[["ID"]])
   
+
   #Load Raster
-  house = raster(file.path(data_dir,paste0("raw/applications/house_price/grid_",city,".tif")))
+  housevolume = raster(file.path(data_dir,paste0("raw/volume/2010_NRES/cropped_NRES_",city,".tif")))
   crs = CRS(as.character("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
   
-  house <- projectRaster(house, crs = crs)
+  house <- projectRaster(housevolume, crs = crs)
   #Create 
   recs = centroidsToTiles(lat = sampLat, lon = sampLon, zoom = zoom, numPix = pixels)
   
@@ -91,18 +90,17 @@ for (city in c(#'Eldoret','Embu','Garissa','Kakamega','Kericho',
   out = raster::extract(x = house, y = recs, fun = mean)
   
   df = cbind(ID, sampLon, sampLat, out)
-  colnames(df) = c("ID","lon","lat","houseprice")
+  colnames(df) = c("ID","lon","lat","nonres")
   dt = data.table(df)
   
   ### set the NA values to -999
-  dt$houseprice[is.na(dt$houseprice)] = -999
+  dt$nonres[is.na(dt$nonres)] = -999
   
   ### Save
-  paste0("grid", "_",city, "_", as.character(zoom), "_", as.character(pixels), "_", 
-         sampling, "_",meters_per_grid,"_", format(S, scientific = FALSE))
+
   label_dir = file.path(data_dir,"int/applications/housing", city)
   dir.create(label_dir, showWarnings=FALSE, recursive=TRUE)
-  fn = file.path(label_dir, paste0("outcomes_sampled_houseprice_dense_",as.character(zoom), "_", as.character(pixels), "_", 
+  fn = file.path(label_dir, paste0("outcomes_sampled_nres_dense_",as.character(zoom), "_", as.character(pixels), "_", 
                                    sampling,"_",meters_per_grid,"_", S, ".csv"))
   
   write.csv(x = dt, file = fn)

@@ -28,7 +28,7 @@ import numpy as np
 import seaborn as sns
 
 # get home directory
-root_dir = "c:\\users\\dell\\documents\\github\\kanyan" 
+root_dir = "c:\\users\\dell\\documents\\github\\kanyan\\Kenya-Land-Value" 
 os.environ["MOSAIKS_HOME"] = root_dir
 
 
@@ -68,9 +68,12 @@ features = {
         "patch_size": 3,
         "seed": 0,
         "type": "random_features",
-        "num_filters": 32, #128
-        "pool_size": 12,
-        "pool_stride": 3,
+        #"num_filters": 8, #128
+        #"pool_size": 24,
+        #"pool_stride": 3,
+        "num_filters": 16, # 32,64
+        "pool_size": 64, # 32,64
+        "pool_stride": 1,
         "bias": 0.0,
         "filter_scale": 1e-3,
         "patch_distribution": "gaussian",

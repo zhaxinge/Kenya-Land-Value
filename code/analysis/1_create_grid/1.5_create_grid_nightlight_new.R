@@ -26,10 +26,10 @@ if (mosaiks_code=="") {
   mosaiks_code = here("code")
 }
 
-for (city in c(#'Eldoret','Embu','Garissa','Kakamega','Kisumu',
-                'Kericho',
-               'Kitui','Machakos','Malindi','Mombasa','Nairobi','Naivasha','Nakuru','Nyeri',
-               'Thika'
+for (city in c('Eldoret'
+               #,'Embu','Garissa','Kakamega','Kisumu','Kericho',
+               #'Kitui','Machakos','Malindi','Mombasa','Nairobi','Naivasha','Nakuru','Nyeri',
+               #'Thika'
 )) {
   print(city)
   source(file.path(mosaiks_code, "mosaiks", "config.R"))
@@ -74,9 +74,22 @@ for (city in c(#'Eldoret','Embu','Garissa','Kakamega','Kisumu',
   zoom = npz1$f[["zoom"]]
   pixels = npz1$f[["pixels"]]
   ID = c(npz1$f[["ID"]])
+  
+  # Create an empty RasterBrick to store the images
+  img_brick <- brick()
+  
+  # Loop through each year and load images
+  for (i in 1:12) {
+    # Load the TIFF image for the current city and year
+    tiff_path <- file.path(data_dir, "raw/applications/lightnight_noreduce", paste0(i, ".tif"))
+    img <- raster(tiff_path)
     
-  # Load JPEG image
-  img <- brick(file.path(data_dir, "raw/landsat2013",paste0("2013_",city,".tif")))
+    # Add the image to the RasterBrick
+    img_brick <- addLayer(img_brick, img)
+  }
+  
+  # Calculate the mean value of the images
+  img <- calc(img_brick, mean)
   # Set the extent of the image
   ext <- extent(lonmin, lonmax, latmin, latmax)
   extent(img) <- ext
@@ -87,7 +100,7 @@ for (city in c(#'Eldoret','Embu','Garissa','Kakamega','Kisumu',
   # Create tiles
   recs <- centroidsToTiles(lat = sampLat, lon = sampLon, zoom = zoom, numPix = pixels)
   
-  output_dir <- file.path(data_dir, "raw/landsat2013-crop",city)
+  output_dir <- file.path(data_dir, "raw/nightlight-2013",city)
   dir.create(output_dir, showWarnings=FALSE, recursive=TRUE)
   
   # Get the number of grid cells
