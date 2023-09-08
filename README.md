@@ -55,3 +55,6 @@ This package contains all functions called by the analysis scripts in analysis/ 
 Within this directory, you will find notebooks that have been executed on the Planetary Computer. You can leverage these notebooks on the Planetary Computer platform to harness its computational resources. This allows you to access satellite data efficiently without the necessity of downloading all the images to your local drive.
 
 Part of the Model Results is here: https://docs.google.com/spreadsheets/d/1dL7U001rqjquFaeK9BvI4aRrai4oyQ_q/edit?usp=sharing&ouid=100652074630461008396&rtpof=true&sd=true
+
+Task Trackor for the project: https://docs.google.com/document/d/1gcB4M7ORAJdsbtvvd7jr34DOIxuKrv8u_q226Hwm0Rc/edit?usp=sharing
+
