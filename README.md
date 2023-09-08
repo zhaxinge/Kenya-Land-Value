@@ -38,7 +38,9 @@ The data folder is organized as follows:
 
 - [2_delete_xml.py](code/analysis/2_delete_xml.py): This file is used for deleting unnecessary files generated in the previous process.
   
-- [3_feature_extraction.py](code/analysis/3_image_extraction.py): This file transforms raw satellite images into MOSAIKS random convolutional features. While this is a relatively computationally expensive step in the MOSAIKS pipeline, I have tested for three different sets of parameters and selected one set of the best parameters. If we need to improve further, I can test for more.
+- [3_feature_extraction.py](code/analysis/3_image_extraction.py): This file transforms raw satellite images into MOSAIKS random convolutional features. In this result, I utilize the num features = 256.
+
+- [3_image_extration_nightlight.py](code/analysis/3_image_extraction_nightlight.py): This file transforms lightnight images into MOSAIKS random convolutional features. In this result, I utilize the num features = 256.
 
 
 (code/mosaiks/config.py) and [config.R](code/mosaiks/config.R). Users can choose to enter the pipeline at this stage, relying on the output from the cleaning and standardization of both labeled data (“Y”) and features (“X”) occurring in scripts in steps 0 through 2, as all output is provided for all intermediate steps in `data/int/`.
@@ -48,5 +50,6 @@ The data folder is organized as follows:
 
 This package contains all functions called by the analysis scripts in analysis/ and subfolders therein sourced from mosaiks paper.
 
+### 2.3 notebook/
 
-
+Within this directory, you will find notebooks that have been executed on the Planetary Computer. You can leverage these notebooks on the Planetary Computer platform to harness its computational resources. This allows you to access satellite data efficiently without the necessity of downloading all the images to your local drive.
