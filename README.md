@@ -58,3 +58,9 @@ Part of the Model Results is here: https://docs.google.com/spreadsheets/d/1dL7U0
 
 Task Trackor for the project: https://docs.google.com/document/d/1gcB4M7ORAJdsbtvvd7jr34DOIxuKrv8u_q226Hwm0Rc/edit?usp=sharing
 
+For now the project finished running the ridge regression the testing the following datasets: 
+- All sentinel2 images from 2018 and 2017 + VIIRS nightlight data from 2013
+- All landsat 7 from 2012 and 2013 and all landsat 8 images from 2013 and 2014  + VIIRS nightlight data from 2013
+- GEOMAD +  VIIRS nightlight data from 2013
+
+
